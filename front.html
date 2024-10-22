@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple web App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        label, button {
+            margin: 5px 0;
+            display: block;
+        }
+        button {
+            padding: 5px 10px;
+        }
+        #name-list {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add and Show Names</h1>
+
+    <label for="name">Enter Name:</label>
+    <input type="text" id="name" placeholder="Enter a name" />
+    <button id="add-name">Add Name</button>
+    <button id="show-names">Show All Names</button>
+
+    <div id="name-list"></div>
+
+    <script>
+         const baseURL = 'https://webapptest12-dseae7g0a9b7fjeq.uksouth-01.azurewebsites.net:8080/api/names';  // Dynamically detect the origin (whether local or Azure)
+
+        // Function to add a new name
+        document.getElementById('add-name').addEventListener('click', async () => {
+            const name = document.getElementById('name').value;
+            if (!name) {
+                alert('Please enter a name');
+                return;
+            }
+            console.log('hh')
+            // Send a POST request to add the name
+            try {
+                const response = await fetch(`${baseURL}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name })
+                });
+                ;
+
+                const data = await response.json();
+                alert(`Name "${data.name}" added!`);
+                document.getElementById('name').value = ''; // Clear input field
+            } catch (error) {
+                console.log(error);
+                alert('Error adding name');
+            }
+        });
+//${baseURL}
+        // Function to fetch and display all names
+        document.getElementById('show-names').addEventListener('click', async () => {
+            try {
+                const response = await fetch('${baseURL}')
+                const names = await response.json();
+                console.log(names.users)
+                const nameListDiv = document.getElementById('name-list');
+                nameListDiv.innerHTML = '<h2>Names in Database:</h2>';
+
+                // Display the names
+                names.users.forEach(name => {
+                   
+                    const p = document.createElement('p');
+                    p.textContent = name.name;
+                    nameListDiv.appendChild(p);
+                });
+
+            } catch (error) {
+                alert('Error fetching names');
+            }
+        });
+    </script>
+</body>
+</html>
