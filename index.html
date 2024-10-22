@@ -65,7 +65,7 @@
         // Function to fetch and display all names
         document.getElementById('show-names').addEventListener('click', async () => {
             try {
-                const response = await fetch('${baseURL}')
+                const response = await fetch(`${baseURL}`)
                 const names = await response.json();
                 console.log(names.users)
                 const nameListDiv = document.getElementById('name-list');
